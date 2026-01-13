@@ -5,10 +5,11 @@ package frc.robot.commands
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import edu.wpi.first.wpilibj2.command.Command
+import frc.robot.Constants.FuelConstants
 import frc.robot.subsystems.FuelSubsystem
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-class Intake(fuelSystem: FuelSubsystem) : Command() {
+class Rev(fuelSystem: FuelSubsystem) : Command() {
     /** Creates a new Intake.  */
     var fuelSubsystem: FuelSubsystem
 
@@ -21,8 +22,15 @@ class Intake(fuelSystem: FuelSubsystem) : Command() {
     // appropriate values for intaking
     override fun initialize() {
         fuelSubsystem
-            .setIntakeLauncherRoller(SmartDashboard.getNumber("Intaking intake roller value", INTAKING_INTAKE_VOLTAGE))
-        fuelSubsystem.setFeederRoller(SmartDashboard.getNumber("Intaking feeder roller value", INTAKING_FEEDER_VOLTAGE))
+            .setFlywheel(
+                SmartDashboard.getNumber("Launching launcher roller value", FuelConstants.LAUNCHING_LAUNCHER_VOLTAGE)
+            )
+        fuelSubsystem.setFeederRoller(
+            SmartDashboard.getNumber(
+                "Launching spin-up feeder value",
+                FuelConstants.SPIN_UP_FEEDER_VOLTAGE
+            )
+        )
     }
 
     // Called every time the scheduler runs while the command is scheduled. This
@@ -32,8 +40,6 @@ class Intake(fuelSystem: FuelSubsystem) : Command() {
 
     // Called once the command ends or is interrupted. Stop the rollers
     override fun end(interrupted: Boolean) {
-        fuelSubsystem.setIntakeLauncherRoller(0)
-        fuelSubsystem.setFeederRoller(0)
     }
 
     // Returns true when the command should end.
